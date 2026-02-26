@@ -391,7 +391,7 @@ void print_sdl(SDL_Renderer *renderer, SDL_Texture *alphabet[ALPHABET_LENGTH], s
         else if (sym >= 'a' && sym <= 'z')
             SDL_RenderCopy(renderer, alphabet[toupper(sym) - 'A'], NULL, &rect);
         else if (sym >= '0' && sym <= '9')
-            SDL_RenderCopy(renderer, alphabet['Z' + 1 + sym - '0'], NULL, &rect);
+            SDL_RenderCopy(renderer, alphabet['Z' - 'A' + 1 + sym - '0'], NULL, &rect);
         rect.x += size;
     }
 }

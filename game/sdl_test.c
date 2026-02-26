@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
         if (step > 1 || SDL_GetTicks() - start_time > 2000)
         {
             pos.x = 450;
-            print_sdl(game.renderer, alphabet, "WILL", &pos, 100);
+            print_sdl(game.renderer, alphabet, "1", &pos, 16);
             if (step <= 1)
                 step += 1;
         }

@@ -1,7 +1,4 @@
 build:
-# 	gcc -o game.exe sdl_test.c font.c `pkg-config --cflags --libs sdl2` - -mconsole
-# 	gcc -o game.exe sdl_test.c font.c \
-#     `pkg-config --cflags --static --libs sdl2`
 	gcc -o game.exe sdl_test.c font.c -I/ucrt64/include/SDL2 \
     -L/ucrt64/lib \
     -static -static-libgcc -static-libstdc++ \
