@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "const.h"
 #include "font.h"
+#include "types.h" // string, point_2d
 
 // SDL window data structure and renderer, write all to struct for better readability
 struct Game
@@ -72,49 +73,31 @@ int main(int argc, char *argv[])
         // clear previous frame
         SDL_RenderClear(game.renderer);
         SDL_Rect rect = {50, 240, 100, 100};
+        point_2d pos = {50, 240};
         // here we can draw our own objects - which we will do
         SDL_SetRenderDrawColor(game.renderer, 0x01, 0xBC, 0x0D, 255);
         if (step > 0 || SDL_GetTicks() - start_time > 1000)
         {
 
-            SDL_RenderCopy(game.renderer, alphabet[(int)'Y' - 'A'], NULL, &rect);
+            print_sdl(game.renderer, alphabet, "YOU", &pos, 100);
 
-            rect.x = 150;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'O' - 'A'], NULL, &rect);
-
-            rect.x = 250;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'U' - 'A'], NULL, &rect);
             if (step <= 0)
                 step += 1;
         }
 
         if (step > 1 || SDL_GetTicks() - start_time > 2000)
         {
-            rect.x = 450;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'A' - 'A'], NULL, &rect);
-
-            rect.x = 550;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'R' - 'A'], NULL, &rect);
-
-            rect.x = 650;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'E' - 'A'], NULL, &rect);
+            pos.x = 450;
+            print_sdl(game.renderer, alphabet, "WILL", &pos, 100);
             if (step <= 1)
                 step += 1;
         }
 
         if (step > 2 || SDL_GetTicks() - start_time > 3000)
         {
-            rect.y = 350;
-
-            rect.x = 250;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'D' - 'A'], NULL, &rect);
-
-            rect.x = 350;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'O' - 'A'], NULL, &rect);
-
-            rect.x = 450;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'G' - 'A'], NULL, &rect);
-
+            pos.y = 350;
+            pos.x = 250;
+            print_sdl(game.renderer, alphabet, "LUZ", &pos, 100);
             if (step <= 2)
                 step += 1;
         }
@@ -124,47 +107,10 @@ int main(int argc, char *argv[])
         rect.h = 20;
         if (step > 3 || SDL_GetTicks() - start_time > 4000)
         {
+            pos.y = 500;
+            pos.x = 220;
 
-            SDL_RenderCopy(game.renderer, alphabet[(int)'P' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'R' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'E' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'S' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'S' - 'A'], NULL, &rect);
-
-            rect.x += 40;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'E' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'S' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'C' - 'A'], NULL, &rect);
-
-            rect.x += 40;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'T' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'O' - 'A'], NULL, &rect);
-
-            rect.x += 40;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'E' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'X' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'I' - 'A'], NULL, &rect);
-
-            rect.x += 20;
-            SDL_RenderCopy(game.renderer, alphabet[(int)'T' - 'A'], NULL, &rect);
+            print_sdl(game.renderer, alphabet, "PRESS ESC TO EXIT", &pos, 20);
 
             if (step <= 3)
                 step += 1;
