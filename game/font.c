@@ -1,7 +1,8 @@
 #include <SDL2/SDL.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include "font.h"
-#include "types.h" // string, point_2d
+#include "types.h" // point_2d
 
 const unsigned char FONT[ALPHABET_LENGTH][FONT_HEIGHT][FONT_WIDTH] = {
     // A
@@ -328,10 +329,18 @@ const unsigned char FONT[ALPHABET_LENGTH][FONT_HEIGHT][FONT_WIDTH] = {
      {1, 1, 0, 0, 0, 1, 1},
      {0, 1, 1, 1, 1, 1, 0}}};
 
-void fill_texture(SDL_Renderer *renderer, SDL_Texture *letter, const unsigned char[FONT_HEIGHT][FONT_WIDTH]);
+static SDL_Texture *alphabet[ALPHABET_LENGTH];
 
-void generate_alphabet(SDL_Renderer *renderer, SDL_Texture *alphabet[ALPHABET_LENGTH])
+static bool is_alphabet_generated = false;
+
+void fill_texture(SDL_Renderer *renderer,
+                  SDL_Texture *letter,
+                  const unsigned char letter_map[FONT_HEIGHT][FONT_WIDTH]);
+
+void generate_alphabet(SDL_Renderer *renderer)
 {
+    if (is_alphabet_generated)
+        return;
     for (int i = 0; i < ALPHABET_LENGTH; i++)
     {
         alphabet[i] = SDL_CreateTexture(
@@ -347,9 +356,12 @@ void generate_alphabet(SDL_Renderer *renderer, SDL_Texture *alphabet[ALPHABET_LE
         SDL_SetTextureBlendMode(alphabet[i], SDL_BLENDMODE_BLEND); // chat gpt recommended for better alpha behaviour. No idea
         fill_texture(renderer, alphabet[i], FONT[i]);
     }
+    is_alphabet_generated = true;
 }
 
-void fill_texture(SDL_Renderer *renderer, SDL_Texture *letter, const unsigned char letter_map[FONT_HEIGHT][FONT_WIDTH])
+void fill_texture(SDL_Renderer *renderer,
+                  SDL_Texture *letter,
+                  const unsigned char letter_map[FONT_HEIGHT][FONT_WIDTH])
 {
     SDL_RendererInfo info;
 
@@ -380,8 +392,13 @@ void fill_texture(SDL_Renderer *renderer, SDL_Texture *letter, const unsigned ch
     SDL_SetRenderTarget(renderer, NULL);
 }
 
-void print_sdl(SDL_Renderer *renderer, SDL_Texture *alphabet[ALPHABET_LENGTH], string str, point_2d *pos, unsigned int size)
+void print_sdl(SDL_Renderer *renderer,
+               const char *str,
+               const point_2d *pos,
+               unsigned int size)
 {
+    if (!is_alphabet_generated)
+        generate_alphabet(renderer);
     SDL_Rect rect = {pos->x, pos->y, size, size};
     for (; *str; str++)
     {

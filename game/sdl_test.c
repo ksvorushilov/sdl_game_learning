@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include "const.h"
 #include "font.h"
-#include "types.h" // string, point_2d
+#include "types.h" // point_2d
 
 // SDL window data structure and renderer, write all to struct for better readability
 struct Game
@@ -36,11 +36,6 @@ int main(int argc, char *argv[])
         printf("NOT SUCCESS.\n");
         sdl_cleanup(&game, EXIT_FAILURE); // the program is terminated immediately here
     }
-    // SDL_RenderCopy
-    SDL_Texture *alphabet[ALPHABET_LENGTH];
-    // create aplhabet to be able to generate letters on screen
-    generate_alphabet(game.renderer,
-                      alphabet);
     // Entity rect = {100, 100, 0, 0, {0x0A, 0x0A, 0xBB}};
     Uint32 start_time = SDL_GetTicks();
     int step = 0;
@@ -79,7 +74,7 @@ int main(int argc, char *argv[])
         if (step > 0 || SDL_GetTicks() - start_time > 1000)
         {
 
-            print_sdl(game.renderer, alphabet, "YOU", &pos, 100);
+            print_sdl(game.renderer, "YOU", &pos, 100);
 
             if (step <= 0)
                 step += 1;
@@ -88,7 +83,7 @@ int main(int argc, char *argv[])
         if (step > 1 || SDL_GetTicks() - start_time > 2000)
         {
             pos.x = 450;
-            print_sdl(game.renderer, alphabet, "1", &pos, 16);
+            print_sdl(game.renderer, "1", &pos, 16);
             if (step <= 1)
                 step += 1;
         }
@@ -97,7 +92,7 @@ int main(int argc, char *argv[])
         {
             pos.y = 350;
             pos.x = 250;
-            print_sdl(game.renderer, alphabet, "LUZ", &pos, 100);
+            print_sdl(game.renderer, "LUZ", &pos, 100);
             if (step <= 2)
                 step += 1;
         }
@@ -110,7 +105,7 @@ int main(int argc, char *argv[])
             pos.y = 500;
             pos.x = 220;
 
-            print_sdl(game.renderer, alphabet, "PRESS ESC TO EXIT", &pos, 20);
+            print_sdl(game.renderer, "PRESS ESC TO EXIT", &pos, 20);
 
             if (step <= 3)
                 step += 1;

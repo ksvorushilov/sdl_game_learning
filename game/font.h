@@ -10,13 +10,9 @@
 #define FONT_HEIGHT 7
 #define ALPHABET_LENGTH 36
 
-void generate_alphabet(SDL_Renderer *renderer,
-                       SDL_Texture *alphabet[ALPHABET_LENGTH]);
-
 void print_sdl(SDL_Renderer *renderer,
-               SDL_Texture *alphabet[ALPHABET_LENGTH],
-               string str,
-               point_2d *pos,
+               const char *str,
+               const point_2d *pos,
                unsigned int size);
 
 #endif // end of include guard
