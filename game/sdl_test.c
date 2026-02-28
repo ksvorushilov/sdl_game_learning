@@ -5,6 +5,7 @@
 #include "const.h"
 #include "font.h"
 #include "types.h" // point_2d
+#include "slider.h"
 
 #define MAX_POINTS 100000
 // SDL window data structure and renderer, write all to struct for better readability
@@ -33,6 +34,10 @@ int main(int argc, char *argv[])
     Uint32 start_time = SDL_GetTicks();
     int step = 0;
     SDL_ShowCursor(SDL_DISABLE); // hide system cursor
+
+    Slider r_slider = {80, 100, 140, 100, 50, 1};
+    Slider g_slider = {330, 100, 140, 100, 50, 1};
+    Slider b_slider = {580, 100, 140, 100, 50, 1};
     while (true)
     {
         bool print_button_press = false;
@@ -58,10 +63,11 @@ int main(int argc, char *argv[])
         }
         // phase 2: render the scene
         //  set bg colour
-        SDL_SetRenderDrawColor(game.renderer, 0xA8, 0x00, 0x84, 255);
+        SDL_SetRenderDrawColor(game.renderer, 80, 80, 80, 255);
 
         // clear previous frame
         SDL_RenderClear(game.renderer);
+
         SDL_Rect rect = {50, 240, 100, 100};
         point_2d pos = {50, 240};
         // here we can draw our own objects - which we will do
@@ -72,12 +78,24 @@ int main(int argc, char *argv[])
         if (mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
             print_button_press = true;
+            if (is_slider_hit(&r_slider, &mouse))
+                modify_slider_value(&r_slider, &mouse);
+            if (is_slider_hit(&g_slider, &mouse))
+                modify_slider_value(&g_slider, &mouse);
+            if (is_slider_hit(&b_slider, &mouse))
+                modify_slider_value(&b_slider, &mouse);
         }
+        SDL_SetRenderDrawColor(game.renderer, r_slider.value, 0, 0, 255);
+        render_slider(game.renderer, &r_slider);
+        SDL_SetRenderDrawColor(game.renderer, 0, g_slider.value, 0, 255);
+        render_slider(game.renderer, &g_slider);
+        SDL_SetRenderDrawColor(game.renderer, 0, 0, b_slider.value, 255);
+        render_slider(game.renderer, &b_slider);
         SDL_Rect cursor = {mouse.x, mouse.y, 10, 10};
-        SDL_RenderFillRect(game.renderer, &cursor);
+
         if (print_button_press)
         {
-            pos.x = 200;
+            pos.x = 150;
             pos.y = 20;
             print_sdl(game.renderer, "Left Mouse Button Pressed", &pos, 20);
         }
@@ -85,7 +103,7 @@ int main(int argc, char *argv[])
         {
             pos.x = 50;
             pos.y = 240;
-            print_sdl(game.renderer, "YOU", &pos, 100);
+            print_sdl(game.renderer, "testing", &pos, 50);
 
             if (step <= 0)
                 step += 1;
@@ -94,7 +112,7 @@ int main(int argc, char *argv[])
         if (step > 1 || SDL_GetTicks() - start_time > 2000)
         {
             pos.x = 450;
-            print_sdl(game.renderer, "1", &pos, 16);
+            print_sdl(game.renderer, "color", &pos, 50);
             if (step <= 1)
                 step += 1;
         }
@@ -102,8 +120,8 @@ int main(int argc, char *argv[])
         if (step > 2 || SDL_GetTicks() - start_time > 3000)
         {
             pos.y = 350;
-            pos.x = 250;
-            print_sdl(game.renderer, "LUZ", &pos, 100);
+            pos.x = 200;
+            print_sdl(game.renderer, "sliders", &pos, 50);
             if (step <= 2)
                 step += 1;
         }
@@ -123,6 +141,9 @@ int main(int argc, char *argv[])
         }
 
         // SDL_RenderDrawRect(game.renderer, &rect);
+
+        SDL_SetRenderDrawColor(game.renderer, r_slider.value, g_slider.value, b_slider.value, 255);
+        SDL_RenderFillRect(game.renderer, &cursor);
 
         // now display it on renderer
         SDL_RenderPresent(game.renderer);
