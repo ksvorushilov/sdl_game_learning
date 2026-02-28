@@ -15,4 +15,6 @@ void print_sdl(SDL_Renderer *renderer,
                const point_2d *pos,
                unsigned int size);
 
+void destroy_alphabet(void);
+
 #endif // end of include guard

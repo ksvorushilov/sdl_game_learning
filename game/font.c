@@ -412,3 +412,12 @@ void print_sdl(SDL_Renderer *renderer,
         rect.x += size;
     }
 }
+
+void destroy_alphabet(void)
+{
+    for (int i = 0; i < ALPHABET_LENGTH; i++)
+    {
+        SDL_DestroyTexture(alphabet[i]);
+        alphabet[i] = NULL;
+    }
+}

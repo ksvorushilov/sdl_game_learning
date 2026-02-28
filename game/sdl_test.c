@@ -6,20 +6,13 @@
 #include "font.h"
 #include "types.h" // point_2d
 
+#define MAX_POINTS 100000
 // SDL window data structure and renderer, write all to struct for better readability
 struct Game
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
 };
-
-// Entity structure representing an object on the screen
-// typedef struct
-// {
-//     float x, y;
-//     float vx, vy;
-//     int color[3];
-// } Entity;
 
 // bro suggests returning 1 for error and 0 for success.
 
@@ -39,8 +32,10 @@ int main(int argc, char *argv[])
     // Entity rect = {100, 100, 0, 0, {0x0A, 0x0A, 0xBB}};
     Uint32 start_time = SDL_GetTicks();
     int step = 0;
+    SDL_ShowCursor(SDL_DISABLE); // hide system cursor
     while (true)
     {
+        bool print_button_press = false;
         // Phase 1: calculate the scene
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -71,9 +66,25 @@ int main(int argc, char *argv[])
         point_2d pos = {50, 240};
         // here we can draw our own objects - which we will do
         SDL_SetRenderDrawColor(game.renderer, 0x01, 0xBC, 0x0D, 255);
+        point_2d mouse;
+        unsigned int mouse_state = SDL_GetMouseState(&mouse.x, &mouse.y);
+
+        if (mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT))
+        {
+            print_button_press = true;
+        }
+        SDL_Rect cursor = {mouse.x, mouse.y, 10, 10};
+        SDL_RenderFillRect(game.renderer, &cursor);
+        if (print_button_press)
+        {
+            pos.x = 200;
+            pos.y = 20;
+            print_sdl(game.renderer, "Left Mouse Button Pressed", &pos, 20);
+        }
         if (step > 0 || SDL_GetTicks() - start_time > 1000)
         {
-
+            pos.x = 50;
+            pos.y = 240;
             print_sdl(game.renderer, "YOU", &pos, 100);
 
             if (step <= 0)
@@ -116,17 +127,6 @@ int main(int argc, char *argv[])
         // now display it on renderer
         SDL_RenderPresent(game.renderer);
 
-        /*
-        THIS IS ANOTHER APPROACH - SHOULD NOT MIX THESE TWO!
-        Tere is a surface workflow vs render workflow
-        SDL_Surface *screenSurface = SDL_GetWindowSurface(game.window);
-
-        // Fill the surface white
-        SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xA8, 0x00, 0x84));
-
-        // Update the surface
-        SDL_UpdateWindowSurface(game.window);
-        */
         SDL_Delay(FRAME_TIME);
     }
 
@@ -136,6 +136,7 @@ int main(int argc, char *argv[])
 
 void sdl_cleanup(struct Game *game, int exit_status) // graceful shutdown.
 {
+    destroy_alphabet();
     SDL_DestroyRenderer(game->renderer); // is able to process NULL, so no prior check required
     SDL_DestroyWindow(game->window);     // same thing as previous line
     SDL_Quit();                          // void SDL_Quit(void), cleans up all allocated memory by SDL
