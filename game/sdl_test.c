@@ -2,35 +2,26 @@
 #include <stdlib.h> // for exit(), EXIT_FAILURE and EXIT_SUCCESS
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+
 #include "const.h"
 #include "font.h"
+#include "manager.h"
 #include "types.h" // point_2d
 #include "slider.h"
 
-#define MAX_POINTS 100000
-// SDL window data structure and renderer, write all to struct for better readability
-struct Game
-{
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-};
-
-// bro suggests returning 1 for error and 0 for success.
-
-void sdl_cleanup(struct Game *game, int exit_status);
-
-bool sdl_initialise(struct Game *game);
-
 int main(int argc, char *argv[])
 {
-    printf("Heeeeeey\n");
+    printf("Program starts.\n");
     struct Game game = {.window = NULL, .renderer = NULL}; // initialize struct with null pointers is recommended to avoid undefined behavior when accessing uninitialized pointers.
-    if (sdl_initialise(&game))
+    if (!sdl_initialise(&game))
     {
         printf("NOT SUCCESS.\n");
         sdl_cleanup(&game, EXIT_FAILURE); // the program is terminated immediately here
     }
-    // Entity rect = {100, 100, 0, 0, {0x0A, 0x0A, 0xBB}};
+    printf("Initialised successfully.\n");
+
+    bool running = true;
+
     Uint32 start_time = SDL_GetTicks();
     int step = 0;
     SDL_ShowCursor(SDL_DISABLE); // hide system cursor
@@ -38,7 +29,7 @@ int main(int argc, char *argv[])
     Slider r_slider = {80, 100, 140, 100, 50, 1};
     Slider g_slider = {330, 100, 140, 100, 50, 1};
     Slider b_slider = {580, 100, 140, 100, 50, 1};
-    while (true)
+    while (running)
     {
         bool print_button_press = false;
         // Phase 1: calculate the scene
@@ -151,37 +142,5 @@ int main(int argc, char *argv[])
         SDL_Delay(FRAME_TIME);
     }
 
-    printf("Success.\n");
     sdl_cleanup(&game, EXIT_SUCCESS);
-}
-
-void sdl_cleanup(struct Game *game, int exit_status) // graceful shutdown.
-{
-    destroy_alphabet();
-    SDL_DestroyRenderer(game->renderer); // is able to process NULL, so no prior check required
-    SDL_DestroyWindow(game->window);     // same thing as previous line
-    SDL_Quit();                          // void SDL_Quit(void), cleans up all allocated memory by SDL
-    exit(exit_status);
-}
-
-bool sdl_initialise(struct Game *game)
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) // init, returns 0 on success, -1 on failure.
-    {
-        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError()); // gets error message from SDL.
-        return true;
-    }
-    game->window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0); // create window, returns pointer to window on success, NULL on failure.
-    if (game->window == NULL)
-    {
-        fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());
-        return true;
-    }
-    game->renderer = SDL_CreateRenderer(game->window, -1, 0);
-    if (game->renderer == NULL)
-    {
-        fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
-        return true;
-    }
-    return false;
 }

@@ -1,3 +1,4 @@
+### cool tutorial on Makefiles - https://makefiletutorial.com/
 #compiler
 CC = gcc
 
@@ -5,7 +6,7 @@ CC = gcc
 TARGET = game.exe
 
 # Source files
-SOURCE = sdl_test.c font.c slider.c
+SOURCE = sdl_test.c font.c slider.c manager.c
 
 #object files
 OBJECT = $(SOURCE:.c=.o)
