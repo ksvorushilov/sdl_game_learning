@@ -23,7 +23,13 @@ bool sdl_initialise(struct Game *game)
         fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError()); // gets error message from SDL.
         return false;
     }
-    game->window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0); // create window, returns pointer to window on success, NULL on failure.
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0"); // 0 - nearest, no blur
+    game->window = SDL_CreateWindow(WINDOW_TITLE,
+                                    SDL_WINDOWPOS_CENTERED,
+                                    SDL_WINDOWPOS_CENTERED,
+                                    SCREEN_WIDTH,
+                                    SCREEN_HEIGHT,
+                                    0); // create window, returns pointer to window on success, NULL on failure.
     if (game->window == NULL)
     {
         fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());

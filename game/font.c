@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <ctype.h>
 #include <stdbool.h>
+
+#include "const.h"
 #include "font.h"
 #include "types.h" // point_2d
 
@@ -345,7 +347,7 @@ void generate_alphabet(SDL_Renderer *renderer)
     for (int i = 0; i < ALPHABET_LENGTH; i++)
     {
         alphabet[i] = SDL_CreateTexture(
-            renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+            renderer, PROJECT_PIXEL_FORMAT, SDL_TEXTUREACCESS_TARGET,
             FONT_HEIGHT + 1, FONT_WIDTH + 1);
         if (!alphabet[i]) // chat gpt recommended verification step
         {

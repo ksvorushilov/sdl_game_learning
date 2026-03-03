@@ -6,7 +6,7 @@ CC = gcc
 TARGET = game.exe
 
 # Source files
-SOURCE = sdl_test.c font.c slider.c manager.c
+SOURCE = sdl_test.c font.c slider.c manager.c canvas.c render.c
 
 #object files
 OBJECT = $(SOURCE:.c=.o)
