@@ -57,25 +57,31 @@ bool draw(CanvasRender *canvas_render,
           SDL_Rect *brush,
           uint32_t val)
 {
-    SDL_Rect res;
-    if (!SDL_IntersectRect(&canvas_render->frame, brush, &res))
+
+    if (!SDL_HasIntersection(&canvas_render->frame, brush))
         return false;
-    size_t w = canvas->size.x;
-    size_t h = canvas->size.y;
+    int w = canvas->size.x;
+    int h = canvas->size.y;
 
-    size_t render_w = canvas_render->frame.w;
-    size_t render_h = canvas_render->frame.h;
+    if (h == 0 || w == 0)
+        return false;
 
-    size_t mod_x = (brush->x - canvas_render->frame.x) * w / render_w;
-    size_t mod_y = (brush->y - canvas_render->frame.y) * h / render_h;
+    int render_w = canvas_render->frame.w;
+    int render_h = canvas_render->frame.h;
 
-    size_t mod_w = brush->w * w / render_w;
-    size_t mod_h = brush->h * h / render_h;
+    int mod_x = (brush->x - canvas_render->frame.x) * w / render_w;
+    int mod_y = (brush->y - canvas_render->frame.y) * h / render_h;
+
+    int mod_w = brush->w * w / render_w;
+    int mod_h = brush->h * h / render_h;
 
     return simple_brush(canvas, &(SDL_Rect){mod_x, mod_y, mod_w, mod_h}, val);
-    // TODO: calculate points to be modified, create brush logic, change ambiguous name of function
+}
 
-    // return true;
+bool is_canvas_hit(CanvasRender *canvas_render, SDL_Rect *brush)
+{
+    return (SDL_TRUE == SDL_HasIntersection(&canvas_render->frame,
+                                            brush));
 }
 
 bool simple_brush(Canvas *canvas, SDL_Rect *modified_area, uint32_t val)
@@ -83,6 +89,6 @@ bool simple_brush(Canvas *canvas, SDL_Rect *modified_area, uint32_t val)
     for (int x = modified_area->x; x < modified_area->x + modified_area->w; x++)
         for (int y = modified_area->y; y < modified_area->y + modified_area->h; y++)
             if (!set_element(canvas, &(point_2d){x, y}, val))
-                return false;
+                ;
     return true;
 }

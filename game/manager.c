@@ -10,6 +10,8 @@
 void sdl_cleanup(struct Game *game, int exit_status) // graceful shutdown.
 {
     destroy_alphabet();
+    destroy_canvas_render(&game->canvas_render);
+    destroy_canvas(&game->canvas);
     SDL_DestroyRenderer(game->renderer); // is able to process NULL, so no prior check required
     SDL_DestroyWindow(game->window);     // same thing as previous line
     SDL_Quit();                          // void SDL_Quit(void), cleans up all allocated memory by SDL
@@ -39,6 +41,23 @@ bool sdl_initialise(struct Game *game)
     if (game->renderer == NULL)
     {
         fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());
+        return false;
+    }
+    if (!init_canvas(&game->canvas, &(point_2d){CANVAS_SIZE_W, CANVAS_SIZE_H}))
+    {
+        fprintf(stderr, "Canvas Init Error: %s\n", SDL_GetError());
+        destroy_canvas(&game->canvas);
+        return false;
+    }
+    if (!init_canvas_render(&game->canvas_render,
+                            game->renderer,
+                            &(point_2d){CANVAS_RENDER_X, CANVAS_RENDER_Y},
+                            &(point_2d){CANVAS_SIZE_W, CANVAS_SIZE_H},
+                            &(point_2d){CANVAS_RENDER_W, CANVAS_RENDER_H}))
+    {
+        fprintf(stderr, "Canvas Render Init Error: %s\n", SDL_GetError());
+        destroy_canvas_render(&game->canvas_render);
+        destroy_canvas(&game->canvas);
         return false;
     }
     return true;

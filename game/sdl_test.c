@@ -11,56 +11,58 @@
 #include "types.h" // point_2d
 #include "slider.h"
 
-bool is_canvas_hit(CanvasRender *canvas_render, SDL_Rect *brush);
+#define INIT_CURSOR_SIZE 20
 
 int main(int argc, char *argv[])
 {
     // INIT
     printf("Program starts.\n");
-    struct Game game = {.window = NULL, .renderer = NULL}; // initialize struct with null pointers is recommended to avoid undefined behavior when accessing uninitialized pointers.
+    struct Game game = {0}; // initialize struct with null pointers is recommended to avoid undefined behavior when accessing uninitialized pointers.
     if (!sdl_initialise(&game))
     {
         printf("NOT SUCCESS.\n");
         sdl_cleanup(&game, EXIT_FAILURE); // the program is terminated immediately here
+        return (EXIT_FAILURE);
     }
     printf("Initialised successfully.\n");
 
     bool running = true;
-    Uint32 start_time = SDL_GetTicks();
-    int step = 0;
+
     SDL_ShowCursor(SDL_DISABLE); // hide system mouse cursor
 
-    Slider r_slider = {80, 20, 140, 100, 50, 1};
-    Slider g_slider = {330, 20, 140, 100, 50, 1};
-    Slider b_slider = {580, 20, 140, 100, 50, 1};
+    Slider r_slider = {
+        .x = 40,
+        .y = 0,
+        .w = 140,
+        .h = 50,
+        .value = 50,
+        .step = 1};
+    Slider g_slider = {
+        .x = 40 + 200,
+        .y = 0,
+        .w = 140,
+        .h = 50,
+        .value = 50,
+        .step = 1};
+    Slider b_slider = {
+        .x = 40 + 400,
+        .y = 0,
+        .w = 140,
+        .h = 50,
+        .value = 50,
+        .step = 1};
+    Slider s_slider = {
+        .x = 40 + 600,
+        .y = 0,
+        .w = 140,
+        .h = 50,
+        .value = 50,
+        .step = 1};
 
-    Canvas canvas;
-    printf("Initialising canvas...\n");
-    if (!init_canvas(&canvas, &(point_2d){CANVAS_SIZE_W, CANVAS_SIZE_H}))
-    {
-        printf("Canvas not initialised.\n");
-        destroy_canvas(&canvas);
-        sdl_cleanup(&game, EXIT_FAILURE); // the program is terminated immediately here
-    }
-    printf("Canvas initialised.\n");
-
-    CanvasRender canvas_render;
-    if (!init_canvas_render(&canvas_render,
-                            game.renderer,
-                            &(point_2d){80, 120},
-                            &(point_2d){CANVAS_SIZE_W, CANVAS_SIZE_H},
-                            &(point_2d){CANVAS_RENDER_W, CANVAS_RENDER_H}))
-    {
-        printf("Canvas render not initialised.\n");
-        destroy_canvas_render(&canvas_render);
-        destroy_canvas(&canvas);
-        sdl_cleanup(&game, EXIT_FAILURE); // the program is terminated immediately here
-    }
-    printf("Canvas render initialised.\n");
-
+    SDL_Rect cursor = {0, 0, INIT_CURSOR_SIZE, INIT_CURSOR_SIZE};
     while (running)
     {
-        bool print_button_press = false;
+        Uint32 start_time = SDL_GetTicks();
         // Phase 1: process the input
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -68,41 +70,37 @@ int main(int argc, char *argv[])
             if (event.type == SDL_QUIT)
             {
                 printf("Gracefully quit.\n");
-                destroy_canvas_render(&canvas_render);
-                destroy_canvas(&canvas);
-                sdl_cleanup(&game, EXIT_SUCCESS);
+                running = false;
             }
             if (event.type == SDL_KEYDOWN)
             {
-                // const Uint8 *keystate = SDL_GetKeyboardState(NULL); - chatgpt said it is too much and redundant
-                // since we already have key in event
                 if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                 {
                     printf("Gracefully quit by pressing esc.\n");
-                    destroy_canvas_render(&canvas_render);
-                    destroy_canvas(&canvas);
-                    sdl_cleanup(&game, EXIT_SUCCESS);
+                    running = false;
                 }
             }
         }
         point_2d mouse;
         unsigned int mouse_state = SDL_GetMouseState(&mouse.x, &mouse.y);
-        SDL_Rect cursor = {mouse.x, mouse.y, 50, 50};
+        cursor.x = mouse.x;
+        cursor.y = mouse.y;
 
         if (mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
-            print_button_press = true;
             if (is_slider_hit(&r_slider, &mouse))
                 modify_slider_value(&r_slider, &mouse);
             if (is_slider_hit(&g_slider, &mouse))
                 modify_slider_value(&g_slider, &mouse);
             if (is_slider_hit(&b_slider, &mouse))
                 modify_slider_value(&b_slider, &mouse);
+            if (is_slider_hit(&s_slider, &mouse))
+                modify_slider_value(&s_slider, &mouse);
 
-            if (is_canvas_hit(&canvas_render, &cursor))
+            if (is_canvas_hit(&game.canvas_render, &cursor))
             {
-                draw(&canvas_render,
-                     &canvas,
+                draw(&game.canvas_render,
+                     &game.canvas,
                      game.renderer,
                      &cursor,
                      pack_color(r_slider.value, g_slider.value, b_slider.value, 255));
@@ -111,12 +109,9 @@ int main(int argc, char *argv[])
         // phase 2: render the scene
         //  set bg colour
         SDL_SetRenderDrawColor(game.renderer, 80, 80, 80, 255);
-
         // clear previous frame
         SDL_RenderClear(game.renderer);
 
-        SDL_Rect rect = {50, 240, 100, 100};
-        point_2d pos = {50, 240};
         // here we can draw our own objects - which we will do
         SDL_SetRenderDrawColor(game.renderer, r_slider.value, 0, 0, 255);
         render_slider(game.renderer, &r_slider);
@@ -124,30 +119,26 @@ int main(int argc, char *argv[])
         render_slider(game.renderer, &g_slider);
         SDL_SetRenderDrawColor(game.renderer, 0, 0, b_slider.value, 255);
         render_slider(game.renderer, &b_slider);
-        // SDL_RenderDrawRect(game.renderer, &rect);
+        SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 255);
+        render_slider(game.renderer, &s_slider);
 
-        // printf("drawing canvas...\n");
-        render_canvas(&canvas_render, game.renderer, &canvas);
+        render_canvas(&game.canvas_render, game.renderer, &game.canvas);
 
         SDL_SetRenderDrawColor(game.renderer, r_slider.value, g_slider.value, b_slider.value, 255);
+        cursor.h = s_slider.value;
+        cursor.w = s_slider.value;
         SDL_RenderFillRect(game.renderer, &cursor);
 
         // now display it on renderer
         SDL_RenderPresent(game.renderer);
 
-        SDL_Delay(FRAME_TIME);
+        Uint32 current_frame_time = SDL_GetTicks() - start_time;
+        if (current_frame_time < FRAME_TIME)
+            SDL_Delay(FRAME_TIME - current_frame_time);
     }
 
     // clean everything up
-    destroy_canvas_render(&canvas_render);
-    destroy_canvas(&canvas);
+    SDL_ShowCursor(SDL_ENABLE);
     sdl_cleanup(&game, EXIT_SUCCESS);
-}
-
-bool is_canvas_hit(CanvasRender *canvas_render, SDL_Rect *brush)
-{
-    SDL_Rect dummy;
-    return (SDL_TRUE == SDL_IntersectRect(&canvas_render->frame,
-                                          brush,
-                                          &dummy));
+    return (EXIT_SUCCESS);
 }

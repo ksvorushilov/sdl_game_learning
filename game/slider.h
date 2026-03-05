@@ -1,10 +1,14 @@
-#ifndef SLIDER_H  // This is called include guard
-#define SLLIDER_H // and it is a standard C idiom for header files
+#ifndef SLIDER_H // This is called include guard
+#define SLIDER_H // and it is a standard C idiom for header files
 
 // your header contents here
 
 #include <SDL2/SDL.h>
 #include "types.h"
+
+#define SLIDER_VALUE_STRLEN 10
+#define MIN_SLIDER_VALUE 0
+#define MAX_SLIDER_VALUE 255
 
 typedef struct
 {

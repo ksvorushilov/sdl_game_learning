@@ -30,6 +30,8 @@ bool render_canvas(CanvasRender *canvas_render,
                    SDL_Renderer *renderer,
                    Canvas *canvas);
 
+bool is_canvas_hit(CanvasRender *canvas_render, SDL_Rect *brush);
+
 bool simple_brush(Canvas *canvas, SDL_Rect *modified_area, uint32_t val);
 
 #endif

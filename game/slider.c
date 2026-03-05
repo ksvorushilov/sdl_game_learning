@@ -3,9 +3,6 @@
 #include "font.h"
 #include "slider.h"
 
-#define MIN_SLIDER_VALUE 0
-#define MAX_SLIDER_VALUE 255
-
 void render_slider(SDL_Renderer *renderer, Slider *slider)
 {
     int center_left_x = slider->x;
@@ -20,12 +17,12 @@ void render_slider(SDL_Renderer *renderer, Slider *slider)
 
     SDL_Rect slider_cursor = {cursor_pos - cursor_w / 2, center_y - cursor_h / 2, cursor_w, cursor_h};
 
-    // SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // magic number - to fix
     SDL_RenderDrawLine(renderer, center_left_x, center_y, center_right_x, center_y);
     SDL_RenderFillRect(renderer, &slider_cursor);
 
-    char value_str[10]; // magic number - to fix
-    sprintf(value_str, "%d", slider->value);
+    char value_str[SLIDER_VALUE_STRLEN]; 
+    snprintf(value_str, SLIDER_VALUE_STRLEN, "%d", slider->value);
+
     point_2d text_pos = {upper_center_x, upper_center_y};
 
     print_sdl(renderer, value_str, &text_pos, 10);

@@ -6,8 +6,8 @@
 
 typedef struct
 {
-    uint32_t x;
-    uint32_t y;
+    int x;
+    int y;
 } point_2d;
 
 #endif // end of include guard
