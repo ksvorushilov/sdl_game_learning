@@ -9,6 +9,7 @@
 
 void sdl_cleanup(struct Game *game, int exit_status) // graceful shutdown.
 {
+    SDL_ShowCursor(SDL_ENABLE); // hide system mouse cursor
     destroy_alphabet();
     destroy_canvas_render(&game->canvas_render);
     destroy_canvas(&game->canvas);
@@ -60,5 +61,6 @@ bool sdl_initialise(struct Game *game)
         destroy_canvas(&game->canvas);
         return false;
     }
+    SDL_ShowCursor(SDL_DISABLE); // hide system mouse cursor
     return true;
 }
