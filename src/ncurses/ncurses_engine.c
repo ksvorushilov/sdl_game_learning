@@ -5,8 +5,8 @@
 #include <ncurses.h>
 
 #include "types.h"
-#include "ui_and_engine.h"
 #include "ncurses_engine.h"
+#include "ncurses_render.h"
 
 bool engine_configure_kb_input(game_window_t window);
 
@@ -24,6 +24,7 @@ int engine_init() // argument for compatibility
     }
 
     start_color();
+    init_colors();
     refresh(); // Linux compatibility
     return EXIT_SUCCESS;
 }

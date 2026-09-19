@@ -1,42 +1,17 @@
 #include <ncurses.h>
 
 #include "ncurses_engine.h"
-#include "ui_and_engine.h"
-#include "manager.h"
+#include "types.h"
+#include "ncurses_render.h"
 
-typedef enum
-{
-    RENDER_COLOR_0, // default, leave untouched
-    RENDER_COLOR_BG,
-    RENDER_COLOR_SNAKE,
-    RENDER_COLOR_FOOD,
-    RENDER_COLOR_TEXT,
-    RENDER_COLOR_5,
-    RENDER_COLOR_6,
-    RENDER_COLOR_7
-
-} RENDER_COLOR_t;
 
 void render_color_cell(Game_t *game, const int x, const int y, RENDER_COLOR_t color);
 
-void render_set_bg_color(Game_t *game)
+void init_colors(void)
 {
-    (void)game;
     init_pair(RENDER_COLOR_BG, COLOR_WHITE, COLOR_MAGENTA);
-}
-void render_set_text_color(Game_t *game)
-{
-    (void)game;
     init_pair(RENDER_COLOR_TEXT, COLOR_WHITE, COLOR_BLUE);
-}
-void render_set_snake_color(Game_t *game)
-{
-    (void)game;
     init_pair(RENDER_COLOR_SNAKE, COLOR_GREEN, COLOR_GREEN);
-}
-void render_set_food_color(Game_t *game)
-{
-    (void)game;
     init_pair(RENDER_COLOR_FOOD, COLOR_RED, COLOR_RED);
 }
 

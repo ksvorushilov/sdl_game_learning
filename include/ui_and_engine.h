@@ -22,10 +22,6 @@ void process_menu_input(Game_t *game);
 void process_game_input(Game_t *game);
 
 // render
-void render_set_bg_color(Game_t *game);
-void render_set_food_color(Game_t *game);
-void render_set_snake_color(Game_t *game);
-void render_set_text_color(Game_t *game);
 void render_draw_snake(Game_t *game);
 void render_draw_food(Game_t *game);
 void render_print_plain(Game_t *game, char *str_to_print, point_2d coord);
