@@ -5,8 +5,6 @@
 #include "ui_and_engine.h"
 #include "manager.h"
 
-#include "ncurses_engine.h"
-
 void process_menu_input(Game_t *game)
 {
     int ch = wgetch(game->window.window);

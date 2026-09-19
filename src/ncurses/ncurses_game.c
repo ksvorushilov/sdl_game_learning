@@ -4,11 +4,8 @@
 
 #include <ncurses.h>
 
-// #include "ui_and_engine.h"
-// #include "manager.h"
 #include "types.h"
 
-#include "ncurses_engine.h"
 #include "ncurses_bindings.h"
 
 void process_game_input(Game_t *game)

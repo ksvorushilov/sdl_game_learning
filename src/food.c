@@ -9,7 +9,6 @@
 
 void food_generate(Game_t *game)
 {
-    // int reroll_steps = 0;
     for (int i = 0; i < FOOD_QUANTITY; i++)
     {
         food_reroll_instance(i, game);

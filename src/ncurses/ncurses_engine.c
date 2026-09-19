@@ -5,7 +5,6 @@
 #include <ncurses.h>
 
 #include "types.h"
-#include "ncurses_engine.h"
 #include "ncurses_render.h"
 
 bool engine_configure_kb_input(game_window_t window);

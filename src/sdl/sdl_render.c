@@ -73,14 +73,14 @@ void render_print_plain(Game_t *game, char *str_to_print, point_2d coord)
     print_sdl(game->renderer.renderer,
               str_to_print,
               &(point_2d){coord.x * SCREEN_CELL_WIDTH, coord.y * SCREEN_CELL_HEIGHT},
-              20);
+              10);
 }
 void render_print_title(Game_t *game, char *str_to_print, point_2d coord)
 {
     print_sdl(game->renderer.renderer,
               str_to_print,
               &(point_2d){coord.x * SCREEN_CELL_WIDTH, coord.y * SCREEN_CELL_HEIGHT},
-              60);
+              20);
 }
 
 static void render_color_cell(Game_t *game, const int x, const int y)

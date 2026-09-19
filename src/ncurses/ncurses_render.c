@@ -1,6 +1,5 @@
 #include <ncurses.h>
 
-#include "ncurses_engine.h"
 #include "types.h"
 #include "ncurses_render.h"
 
@@ -46,11 +45,11 @@ void render_draw_food(Game_t *game)
 
 void render_print_plain(Game_t *game, char *str_to_print, point_2d coord)
 {
-    mvwprintw(game->window.window, coord.y, coord.x, str_to_print);
+    mvwprintw(game->window.window, coord.y, coord.x * SYMBOLS_PER_CELL, str_to_print);
 }
 void render_print_title(Game_t *game, char *str_to_print, point_2d coord)
 {
-    mvwprintw(game->window.window, coord.y, coord.x, str_to_print);
+    mvwprintw(game->window.window, coord.y, coord.x * SYMBOLS_PER_CELL, str_to_print);
 }
 
 void render_color_cell(Game_t *game, const int x, const int y, RENDER_COLOR_t color)
