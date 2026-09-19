@@ -13,7 +13,7 @@
 
 #define INIT_SNAKE_STEP_TIME 300
 
-#define FOOD_QUANTITY 1190
+#define FOOD_QUANTITY 3
 
 typedef enum VEL_STATE
 {

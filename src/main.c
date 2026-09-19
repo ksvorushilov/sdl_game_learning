@@ -24,18 +24,18 @@ int main(void)
     }
 
     game.running = true;
-
+    platform_timer_t frame_time;
     while (game.running)
     {
-        game.game_timer = get_time_msec();
+        frame_time = get_time_msec();
 
         input(&game);
         update(&game);
         render(&game);
-        uint32_t current_time = get_time_msec() - game.game_timer;
+        platform_timer_t current_time = get_time_msec() - frame_time;
         if (current_time < FRAME_TIME)
         {
-            time_delay(current_time);
+            time_delay(FRAME_TIME - current_time);
         }
     }
 

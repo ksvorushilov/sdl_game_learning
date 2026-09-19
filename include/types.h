@@ -47,9 +47,7 @@ typedef struct Game_t
     bool ever_lost;
 
     // time
-    platform_timer_t frame_time;
     platform_timer_t step_time;
-    platform_timer_t game_timer;
 
     // snake
     Snake *snake;

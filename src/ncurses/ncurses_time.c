@@ -14,7 +14,7 @@ uint32_t get_time_msec()
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return (ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
 }
-void time_delay(uint32_t val)
+void time_delay(platform_timer_t val)
 {
     napms(val); 
 }

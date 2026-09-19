@@ -14,8 +14,6 @@ void menu_input(struct Game_t *game)
 {
     // Phase 1: process the input
     process_menu_input(game);
-    game->frame_time = get_time_msec();
-    // platform_timer_get_time_diff(game->frame_time, PLATFORM_TIME_ZERO);
 }
 
 void menu_update(struct Game_t *game)
@@ -43,10 +41,9 @@ void menu_render(struct Game_t *game)
     }
     render_print_plain(game, "press spacebar to start", (point_2d){15, 25});
     render_print_plain(game, "wrap snake around field (t to toggle):", (point_2d){10, 27});
-    render_print_plain(game, 
-                        game->wraparound ? "YES" : "NO", 
-                        (point_2d){33, 27});
-    
+    render_print_plain(game,
+                       game->wraparound ? "YES" : "NO",
+                       (point_2d){33, 27});
 
     // now display it on renderer
     render_present(game);

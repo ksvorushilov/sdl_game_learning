@@ -9,7 +9,7 @@ uint32_t get_time_msec()
     return SDL_GetTicks();
 }
 
-void time_delay(uint32_t val)
+void time_delay(platform_timer_t val)
 {
     SDL_Delay(val);
 }

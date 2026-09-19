@@ -15,7 +15,7 @@ void engine_quit();
 
 // time
 platform_timer_t get_time_msec();
-void time_delay(uint32_t val);
+void time_delay(platform_timer_t val);
 
 // input
 void process_menu_input(Game_t *game);

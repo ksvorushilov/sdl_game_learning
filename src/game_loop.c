@@ -14,7 +14,6 @@ void game_input(struct Game_t *game)
 {
     // Phase 1: process the input
     process_game_input(game);
-    game->frame_time = get_time_msec();
 }
 
 void game_update(struct Game_t *game)
