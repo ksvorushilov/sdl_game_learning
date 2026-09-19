@@ -65,7 +65,7 @@ else
 
     LDFLAGS_SDL = $(shell sdl2-config --libs)
 
-	LDLIBS_SDL = 
+	LDLIBS_SDL = -lm
 
 endif
 
